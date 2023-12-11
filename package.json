@@ -11,7 +11,7 @@
     "tsup": "^6.6.3"
   },
   "scripts": {
-    "preversion": "yarn run build",
+    "preversion": "yarn run build && git add dist",
     "build": "tsup src/index.ts",
     "dev": "npm run build -- --watch"
   },
