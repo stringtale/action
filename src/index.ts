@@ -29,9 +29,9 @@ import { run } from "./run"
   //   await gitUtils.setupUser()
   // }
 
-  core.info("setting GitHub credentials: " + process.env.HOME)
+  core.info("setting GitHub credentials: ")
   await fs.writeFile(
-    `~/.netrc`,
+    `${process.env.HOME}/.netrc`,
     `machine github.com\nlogin github-actions[bot]\npassword ${githubToken}`
   )
 

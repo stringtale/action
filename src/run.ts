@@ -61,11 +61,15 @@ export async function run({
   ...props
 }: RunProps): Promise<RunVersionResult> {
 
+  core.info("Pull stringtale")
+
   const res = await pull(props)
   if (res.length === 0) {
     core.info("No files to update")
     return null
   }
+
+  core.info("Start GitHub")
 
   const octokit = setupOctokit(githubToken);
 
@@ -82,10 +86,14 @@ export async function run({
   });
   const finalPrTitle = `${prTitle}`;
 
+  core.info("Committing")
+
   // project with `commit: true` setting could have already committed files
   if (!(await gitUtils.checkIfClean())) {
     await gitUtils.commitAll(commitMessage);
   }
+  
+  core.info("Pushing")
 
   await gitUtils.push(versionBranch, { force: true });
 
