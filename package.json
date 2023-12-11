@@ -1,0 +1,29 @@
+{
+  "name": "@stringtale/action",
+  "version": "0.2.0",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.js",
+  "license": "MIT",
+  "devDependencies": {
+    "config": "*",
+    "fixturez": "^1.1.0",
+    "tsconfig": "*",
+    "tsup": "^6.6.3",
+    "utils": "*"
+  },
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "tsup src/index.ts",
+    "dev": "npm run build -- --watch"
+  },
+  "publishConfig": {
+    "registry": "https://git.demonsters.com/api/v4/projects/170/packages/npm/"
+  },
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@actions/exec": "^1.1.1",
+    "@actions/github": "^6.0.0",
+    "@octokit/plugin-throttling": "^8.1.3"
+  }
+}

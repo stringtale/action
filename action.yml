@@ -1,0 +1,8 @@
+name: Stringtale
+description: A GitHub action to check for copy update
+runs:
+  using: "node20"
+  main: "dist/index.js"
+branding:
+  icon: "package"
+  color: "blue"
