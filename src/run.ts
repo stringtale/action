@@ -3,8 +3,8 @@ import * as github from "@actions/github"
 import { GitHub, getOctokitOptions } from "@actions/github/lib/utils"
 import { throttling } from "@octokit/plugin-throttling"
 import * as gitUtils from "./gitUtils"
-import pull from "utils/pull"
-import getLocalConfig, { LocalConfig } from "utils/getLocalConfig"
+import { pull } from "@stringtale/utils"
+// import getLocalConfig, { LocalConfig } from "utils/getLocalConfig"
 
 const setupOctokit = (githubToken: string) => {
   return new (GitHub.plugin(throttling))(
@@ -44,7 +44,11 @@ type RunProps = {
   githubToken: string;
   prTitle?: string;
   commitMessage?: string;
-} & LocalConfig
+  root?: string,
+  token: string,
+  files?: string[] | string
+  ignore?: string[] | string
+}
 
 type RunVersionResult = {
   pullRequestNumber: number;

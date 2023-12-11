@@ -6,19 +6,14 @@
   "types": "dist/index.d.js",
   "license": "MIT",
   "devDependencies": {
-    "config": "*",
+    "@stringtale/utils": "^0.2.5",
     "fixturez": "^1.1.0",
-    "tsconfig": "*",
-    "tsup": "^6.6.3",
-    "utils": "*"
+    "tsup": "^6.6.3"
   },
   "scripts": {
     "prepublish": "npm run build",
     "build": "tsup src/index.ts",
     "dev": "npm run build -- --watch"
-  },
-  "publishConfig": {
-    "registry": "https://git.demonsters.com/api/v4/projects/170/packages/npm/"
   },
   "dependencies": {
     "@actions/core": "^1.10.1",
