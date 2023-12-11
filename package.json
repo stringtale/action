@@ -11,7 +11,7 @@
     "tsup": "^6.6.3"
   },
   "scripts": {
-    "prepublish": "npm run build",
+    "preversion": "yarn run build",
     "build": "tsup src/index.ts",
     "dev": "npm run build -- --watch"
   },
