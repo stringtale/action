@@ -28,6 +28,7 @@ import { run } from "./run"
   //   core.info("setting git user")
   //   await gitUtils.setupUser()
   // }
+  await gitUtils.setupUser();
 
   core.info("setting GitHub credentials")
   await fs.writeFile(
