@@ -3,6 +3,11 @@ description: A GitHub action to check for copy update
 runs:
   using: "node20"
   main: "dist/index.js"
+inputs:
+  setupGitUser:
+    description: Sets up the git user for commits as `"github-actions[bot]"`. Default to `true`
+    required: false
+    default: true
 branding:
   icon: "package"
   color: "blue"

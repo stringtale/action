@@ -22,13 +22,12 @@ import { run } from "./run"
   //   process.chdir(inputCwd)
   // }
 
-  // let setupGitUser = core.getBooleanInput("setupGitUser")
+  let setupGitUser = core.getBooleanInput("setupGitUser")
 
-  // if (setupGitUser) {
-  //   core.info("setting git user")
-  //   await gitUtils.setupUser()
-  // }
-  await gitUtils.setupUser();
+  if (setupGitUser) {
+    core.info("setting git user")
+    await gitUtils.setupUser()
+  }
 
   core.info("setting GitHub credentials")
   await fs.writeFile(
