@@ -63,24 +63,24 @@ export async function run({
 
   core.info("Pull stringtale")
 
-  const res = await pull(props)
-  if (res.length === 0) {
-    core.info("No files to update")
-    return null
-  }
-
   core.info("Start GitHub")
 
   const octokit = setupOctokit(githubToken);
 
   let repo = `${github.context.repo.owner}/${github.context.repo.repo}`;
   let branch = github.context.ref.replace("refs/heads/", "");
-  let versionBranch = `stringtale/${branch}`;
+  let stringtaleBranch = `stringtale/${branch}`;
 
-  await gitUtils.switchToMaybeExistingBranch(versionBranch);
+  await gitUtils.switchToMaybeExistingBranch(stringtaleBranch);
   await gitUtils.reset(github.context.sha);
 
-  let searchQuery = `repo:${repo}+state:open+head:${versionBranch}+base:${branch}+is:pull-request`;
+  const res = await pull(props)
+  if (res.length === 0) {
+    core.info("No files to update")
+    return null
+  }
+
+  let searchQuery = `repo:${repo}+state:open+head:${stringtaleBranch}+base:${branch}+is:pull-request`;
   let searchResultPromise = octokit.rest.search.issuesAndPullRequests({
     q: searchQuery,
   });
@@ -95,7 +95,7 @@ export async function run({
   
   core.info("Pushing")
 
-  await gitUtils.push(versionBranch, { force: true });
+  await gitUtils.push(stringtaleBranch, { force: true });
 
   let searchResult = await searchResultPromise;
   core.info(JSON.stringify(searchResult.data, null, 2));
@@ -106,7 +106,7 @@ export async function run({
     core.info("creating pull request");
     const { data: newPullRequest } = await octokit.rest.pulls.create({
       base: branch,
-      head: versionBranch,
+      head: stringtaleBranch,
       title: finalPrTitle,
       body: prBody,
       ...github.context.repo,

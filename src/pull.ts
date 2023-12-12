@@ -38,6 +38,7 @@ const pull = async ({ token, files = ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.j
     cwd: root,
     nodir: true
   })
+  
 
   let filesChanged: string[] = []
 
@@ -45,13 +46,10 @@ const pull = async ({ token, files = ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.j
 
     const fullPath = root ? path.resolve(root, file) : file
 
-    core.info("Get file: " + fullPath)
-
     const input = fs.readFileSync(fullPath, 'utf-8')
     const output = replaceInFile(input, data.content, file)
     //Contents changed and not a dry run? Write to file
     if (output !== input) {
-      core.info("Write file: " + fullPath)
       fs.writeFileSync(file, output, 'utf8')
       core.info("Writen file: " + fullPath)
       filesChanged.push(file)
