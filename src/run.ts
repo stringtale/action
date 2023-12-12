@@ -3,7 +3,7 @@ import * as github from "@actions/github"
 import { GitHub, getOctokitOptions } from "@actions/github/lib/utils"
 import { throttling } from "@octokit/plugin-throttling"
 import * as gitUtils from "./gitUtils"
-import { pull } from "@stringtale/utils"
+import pull from "./pull"
 // import getLocalConfig, { LocalConfig } from "utils/getLocalConfig"
 
 const setupOctokit = (githubToken: string) => {
