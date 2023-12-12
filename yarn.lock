@@ -313,6 +313,11 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
+"@stringtale/node@^0.2.3":
+  version "0.2.3"
+  resolved "https://git.demonsters.com/api/v4/projects/170/packages/npm/@stringtale/node/-/@stringtale/node-0.2.3.tgz#ed655a6f2981b427243cb991aa73543c4e4519e2"
+  integrity sha1-7WVabymBtCckPLmRqnNUPE5FGeI=
+
 "@stringtale/utils@^0.2.7":
   version "0.2.7"
   resolved "https://git.demonsters.com/api/v4/projects/170/packages/npm/@stringtale/utils/-/@stringtale/utils-0.2.7.tgz#af9d237af626f52ec00f4e1d92d223bf782ccd04"

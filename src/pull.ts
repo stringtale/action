@@ -5,31 +5,15 @@ import { glob } from "glob"
 import fs from "fs"
 import path from "path"
 import { replaceInFile } from "@stringtale/utils"
+import { pull } from "@stringtale/node"
 import * as core from "@actions/core"
-import fetch, { Headers } from "node-fetch"
-
-export const BASE = "https://copytool.demonsters.nl"
-export const CONFIG_FILE = "stringtale.config.json"
 
 
-const pull = async ({ token, files = ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js"], root, ignore = [] }: any) => {
+const pullAndReplace = async ({ token, files = ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js"], root, ignore = [] }: any) => {
 
   core.info("Fetch values from StringTale")
 
-  const res = await fetch(`${BASE}/api/cli/pull/`, {
-    method: 'POST',
-    body: JSON.stringify({ version: 1, all: true }),
-    headers: new Headers({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }),
-  })
-
-  if (!res.ok) {
-    throw new Error(res.statusText)
-  }
-
-  const data = await res.json() as any
+  const data = await pull(token)
 
   core.info("Get files to update: " + files.toString())
 
@@ -39,7 +23,6 @@ const pull = async ({ token, files = ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.j
     nodir: true
   })
   
-
   let filesChanged: string[] = []
 
   for (const file of filesPaths) {
@@ -59,4 +42,4 @@ const pull = async ({ token, files = ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.j
 
 }
 
-export default pull
+export default pullAndReplace

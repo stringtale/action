@@ -3,7 +3,7 @@ import * as github from "@actions/github"
 import { GitHub, getOctokitOptions } from "@actions/github/lib/utils"
 import { throttling } from "@octokit/plugin-throttling"
 import * as gitUtils from "./gitUtils"
-import pull from "./pull"
+import pullAndReplace from "./pull"
 // import getLocalConfig, { LocalConfig } from "utils/getLocalConfig"
 
 const setupOctokit = (githubToken: string) => {
@@ -61,10 +61,6 @@ export async function run({
   ...props
 }: RunProps): Promise<RunVersionResult> {
 
-  core.info("Pull stringtale")
-
-  core.info("Start GitHub")
-
   const octokit = setupOctokit(githubToken);
 
   let repo = `${github.context.repo.owner}/${github.context.repo.repo}`;
@@ -74,7 +70,7 @@ export async function run({
   await gitUtils.switchToMaybeExistingBranch(stringtaleBranch);
   await gitUtils.reset(github.context.sha);
 
-  const res = await pull(props)
+  const res = await pullAndReplace(props)
   if (res.length === 0) {
     core.info("No files to update")
     return null
