@@ -6,6 +6,7 @@ import fs from "fs"
 import path from "path"
 import { replaceInFile } from "@stringtale/utils"
 import * as core from "@actions/core"
+import fetch, { Headers } from "node-fetch"
 
 export const BASE = "https://copytool.demonsters.nl"
 export const CONFIG_FILE = "stringtale.config.json"
