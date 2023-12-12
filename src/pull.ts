@@ -29,7 +29,7 @@ const pull = async ({ token, files = ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.j
     throw new Error(res.statusText)
   }
 
-  const data = await res.json()
+  const data = await res.json() as any
 
   core.info("Get files to update: " + files.toString())
 
