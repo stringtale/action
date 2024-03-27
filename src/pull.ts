@@ -13,6 +13,12 @@ const pullAndReplace = async ({ token, files = ["**/*.tsx", "**/*.ts", "**/*.jsx
 
   core.info("Fetch values from StringTale")
 
+  const nodeFetch = await import("node-fetch")
+  // @ts-ignore
+  global.fetch = nodeFetch.default
+  // @ts-ignore
+  global.Headers = nodeFetch.Headers
+  
   const data = await pull(token)
 
   core.info("Get files to update: " + files.toString())
