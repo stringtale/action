@@ -313,15 +313,15 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
-"@stringtale/node@^0.3.1":
-  version "0.3.1"
-  resolved "https://git.demonsters.com/api/v4/projects/170/packages/npm/@stringtale/node/-/@stringtale/node-0.3.1.tgz#ac4e028ae23c95943677a5a5f23aa9256858ce22"
-  integrity sha1-rE4CiuI8lZQ2d6Wl8jqpJWhYziI=
+"@stringtale/node@^0.3.6":
+  version "0.3.6"
+  resolved "https://git.demonsters.com/api/v4/projects/170/packages/npm/@stringtale/node/-/@stringtale/node-0.3.6.tgz#6dacbfe628c644293975307240d6e9fd58130090"
+  integrity sha1-bay/5ijGRCk5dTByQNbp/VgTAJA=
 
-"@stringtale/utils@^0.3.2":
-  version "0.3.2"
-  resolved "https://git.demonsters.com/api/v4/projects/170/packages/npm/@stringtale/utils/-/@stringtale/utils-0.3.2.tgz#c88a88ac370768b00697306c7403a08d01f0327d"
-  integrity sha1-yIqIrDcHaLAGlzBsdAOgjQHwMn0=
+"@stringtale/utils@^0.3.5":
+  version "0.3.5"
+  resolved "https://git.demonsters.com/api/v4/projects/170/packages/npm/@stringtale/utils/-/@stringtale/utils-0.3.5.tgz#41d689aacab8437caf0cb8b7570a197b015e7b9b"
+  integrity sha1-QdaJqsq4Q3yvDLi3VwoZewFee5s=
 
 "@types/fs-extra@^11.0.4":
   version "11.0.4"
