@@ -56,8 +56,8 @@ type RunVersionResult = {
 
 export async function run({
   githubToken,
-  prTitle = "StringTale Updates",
-  commitMessage = "StringTale Updates",
+  prTitle = "Stringtale Updates",
+  commitMessage = "Stringtale Updates",
   ...props
 }: RunProps): Promise<RunVersionResult> {
 
