@@ -10,9 +10,9 @@ import { run } from "./run"
     return
   }
 
-  let token = process.env.STRINGTALE_TOKEN
+  let token = process.env.STRINGTALE_TOKEN || process.env.STRINGTALE_API_KEY
   if (!token) {
-    core.setFailed("Please add the STRINGTALE_TOKEN to the stringtale action")
+    core.setFailed("Please add the STRINGTALE_API_KEY to the stringtale action")
     return
   }
 
