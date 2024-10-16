@@ -1,6 +1,6 @@
 {
   "name": "@stringtale/action",
-  "version": "0.5.0",
+  "version": "0.3.4",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.js",
