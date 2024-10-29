@@ -7437,6 +7437,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 var src_exports = {};
 __export(src_exports, {
   StringtaleServerError: () => StringtaleServerError,
+  login: () => login,
   pull: () => pull,
   push: () => push,
   toValue: () => toValue,
@@ -7444,14 +7445,15 @@ __export(src_exports, {
 });
 module.exports = __toCommonJS(src_exports);
 
+// ../../packages/config/const.ts
+var BASE = "https://api.stringtale.com";
+
 // ../../node_modules/tslib/tslib.es6.mjs
 var extendStatics = function(d, b) {
   extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
     d2.__proto__ = b2;
   } || function(d2, b2) {
-    for (var p in b2)
-      if (Object.prototype.hasOwnProperty.call(b2, p))
-        d2[p] = b2[p];
+    for (var p in b2) if (Object.prototype.hasOwnProperty.call(b2, p)) d2[p] = b2[p];
   };
   return extendStatics(d, b);
 };
@@ -7468,9 +7470,7 @@ var __assign = function() {
   __assign = Object.assign || function __assign2(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
       s = arguments[i];
-      for (var p in s)
-        if (Object.prototype.hasOwnProperty.call(s, p))
-          t[p] = s[p];
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
     }
     return t;
   };
@@ -7478,9 +7478,8 @@ var __assign = function() {
 };
 function __rest(s, e) {
   var t = {};
-  for (var p in s)
-    if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-      t[p] = s[p];
+  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+    t[p] = s[p];
   if (s != null && typeof Object.getOwnPropertySymbols === "function")
     for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
       if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
@@ -7489,16 +7488,81 @@ function __rest(s, e) {
   return t;
 }
 function __spreadArray(to, from, pack) {
-  if (pack || arguments.length === 2)
-    for (var i = 0, l = from.length, ar; i < l; i++) {
-      if (ar || !(i in from)) {
-        if (!ar)
-          ar = Array.prototype.slice.call(from, 0, i);
-        ar[i] = from[i];
-      }
+  if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (ar || !(i in from)) {
+      if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+      ar[i] = from[i];
     }
+  }
   return to.concat(ar || Array.prototype.slice.call(from));
 }
+
+// ../../node_modules/@formatjs/fast-memoize/lib/index.js
+function memoize(fn, options) {
+  var cache = options && options.cache ? options.cache : cacheDefault;
+  var serializer = options && options.serializer ? options.serializer : serializerDefault;
+  var strategy = options && options.strategy ? options.strategy : strategyDefault;
+  return strategy(fn, {
+    cache,
+    serializer
+  });
+}
+function isPrimitive(value) {
+  return value == null || typeof value === "number" || typeof value === "boolean";
+}
+function monadic(fn, cache, serializer, arg) {
+  var cacheKey = isPrimitive(arg) ? arg : serializer(arg);
+  var computedValue = cache.get(cacheKey);
+  if (typeof computedValue === "undefined") {
+    computedValue = fn.call(this, arg);
+    cache.set(cacheKey, computedValue);
+  }
+  return computedValue;
+}
+function variadic(fn, cache, serializer) {
+  var args = Array.prototype.slice.call(arguments, 3);
+  var cacheKey = serializer(args);
+  var computedValue = cache.get(cacheKey);
+  if (typeof computedValue === "undefined") {
+    computedValue = fn.apply(this, args);
+    cache.set(cacheKey, computedValue);
+  }
+  return computedValue;
+}
+function assemble(fn, context, strategy, cache, serialize) {
+  return strategy.bind(context, fn, cache, serialize);
+}
+function strategyDefault(fn, options) {
+  var strategy = fn.length === 1 ? monadic : variadic;
+  return assemble(fn, this, strategy, options.cache.create(), options.serializer);
+}
+function strategyVariadic(fn, options) {
+  return assemble(fn, this, variadic, options.cache.create(), options.serializer);
+}
+function strategyMonadic(fn, options) {
+  return assemble(fn, this, monadic, options.cache.create(), options.serializer);
+}
+var serializerDefault = function() {
+  return JSON.stringify(arguments);
+};
+function ObjectWithoutPrototypeCache() {
+  this.cache = /* @__PURE__ */ Object.create(null);
+}
+ObjectWithoutPrototypeCache.prototype.get = function(key) {
+  return this.cache[key];
+};
+ObjectWithoutPrototypeCache.prototype.set = function(key, value) {
+  this.cache[key] = value;
+};
+var cacheDefault = {
+  create: function create() {
+    return new ObjectWithoutPrototypeCache();
+  }
+};
+var strategies = {
+  variadic: strategyVariadic,
+  monadic: strategyMonadic
+};
 
 // ../../node_modules/@formatjs/icu-messageformat-parser/lib/error.js
 var ErrorKind;
@@ -7593,9 +7657,11 @@ function parseDateTimeSkeleton(skeleton) {
   skeleton.replace(DATE_TIME_REGEX, function(match) {
     var len = match.length;
     switch (match[0]) {
+      // Era
       case "G":
         result.era = len === 4 ? "long" : len === 5 ? "narrow" : "short";
         break;
+      // Year
       case "y":
         result.year = len === 2 ? "2-digit" : "numeric";
         break;
@@ -7604,13 +7670,16 @@ function parseDateTimeSkeleton(skeleton) {
       case "U":
       case "r":
         throw new RangeError("`Y/u/U/r` (year) patterns are not supported, use `y` instead");
+      // Quarter
       case "q":
       case "Q":
         throw new RangeError("`q/Q` (quarter) patterns are not supported");
+      // Month
       case "M":
       case "L":
         result.month = ["numeric", "2-digit", "short", "long", "narrow"][len - 1];
         break;
+      // Week
       case "w":
       case "W":
         throw new RangeError("`w/W` (week) patterns are not supported");
@@ -7621,6 +7690,7 @@ function parseDateTimeSkeleton(skeleton) {
       case "F":
       case "g":
         throw new RangeError("`D/F/g` (day) patterns are not supported, use `d` instead");
+      // Weekday
       case "E":
         result.weekday = len === 4 ? "long" : len === 5 ? "narrow" : "short";
         break;
@@ -7636,12 +7706,15 @@ function parseDateTimeSkeleton(skeleton) {
         }
         result.weekday = ["short", "long", "narrow", "short"][len - 4];
         break;
+      // Period
       case "a":
         result.hour12 = true;
         break;
       case "b":
+      // am, pm, noon, midnight
       case "B":
         throw new RangeError("`b/B` (period) patterns are not supported, use `a` instead");
+      // Hour
       case "h":
         result.hourCycle = "h12";
         result.hour = ["numeric", "2-digit"][len - 1];
@@ -7662,23 +7735,31 @@ function parseDateTimeSkeleton(skeleton) {
       case "J":
       case "C":
         throw new RangeError("`j/J/C` (hour) patterns are not supported, use `h/H/K/k` instead");
+      // Minute
       case "m":
         result.minute = ["numeric", "2-digit"][len - 1];
         break;
+      // Second
       case "s":
         result.second = ["numeric", "2-digit"][len - 1];
         break;
       case "S":
       case "A":
         throw new RangeError("`S/A` (second) patterns are not supported, use `s` instead");
+      // Zone
       case "z":
         result.timeZoneName = len < 4 ? "short" : "long";
         break;
       case "Z":
+      // 1..3, 4, 5: The ISO8601 varios formats
       case "O":
+      // 1, 4: milliseconds in day short, long
       case "v":
+      // 1, 4: generic non-location format
       case "V":
+      // 1, 2, 3, 4: time zone ID or city
       case "X":
+      // 1, 2, 3, 4: The ISO8601 varios formats
       case "x":
         throw new RangeError("`Z/O/v/V/X/x` (timeZone) patterns are not supported, use `z` instead");
     }
@@ -7876,6 +7957,7 @@ function parseNumberSkeleton(tokens) {
       case "notation-simple":
         result.notation = "standard";
         continue;
+      // https://github.com/unicode-org/icu/blob/master/icu4c/source/i18n/unicode/unumberformatter.h
       case "unit-width-narrow":
         result.currencyDisplay = "narrowSymbol";
         result.unitDisplay = "narrow";
@@ -7915,6 +7997,7 @@ function parseNumberSkeleton(tokens) {
       case "rounding-mode-half-up":
         result.roundingMode = "halfExpand";
         continue;
+      // https://unicode-org.github.io/icu/userguide/format_parse/numbers/skeletons.html#integer-width
       case "integer-width":
         if (token.options.length > 1) {
           throw new RangeError("integer-width stems only accept a single optional option");
@@ -9749,6 +9832,7 @@ var Parser = (
           this.bump();
           this.bump();
           return "'";
+        // '{', '<', '>', '}'
         case 123:
         case 60:
         case 62:
@@ -9814,6 +9898,7 @@ var Parser = (
         return this.error(ErrorKind.EXPECT_ARGUMENT_CLOSING_BRACE, createLocation(openingBracePosition, this.clonePosition()));
       }
       switch (this.char()) {
+        // Simple argument: `{name}`
         case 125: {
           this.bump();
           return {
@@ -9826,6 +9911,7 @@ var Parser = (
             err: null
           };
         }
+        // Argument with options: `{name, format, ...}`
         case 44: {
           this.bump();
           this.bumpSpace();
@@ -10291,73 +10377,6 @@ function parse(message, opts) {
   return result.val;
 }
 
-// ../../node_modules/@formatjs/fast-memoize/lib/index.js
-function memoize(fn, options) {
-  var cache = options && options.cache ? options.cache : cacheDefault;
-  var serializer = options && options.serializer ? options.serializer : serializerDefault;
-  var strategy = options && options.strategy ? options.strategy : strategyDefault;
-  return strategy(fn, {
-    cache,
-    serializer
-  });
-}
-function isPrimitive(value) {
-  return value == null || typeof value === "number" || typeof value === "boolean";
-}
-function monadic(fn, cache, serializer, arg) {
-  var cacheKey = isPrimitive(arg) ? arg : serializer(arg);
-  var computedValue = cache.get(cacheKey);
-  if (typeof computedValue === "undefined") {
-    computedValue = fn.call(this, arg);
-    cache.set(cacheKey, computedValue);
-  }
-  return computedValue;
-}
-function variadic(fn, cache, serializer) {
-  var args = Array.prototype.slice.call(arguments, 3);
-  var cacheKey = serializer(args);
-  var computedValue = cache.get(cacheKey);
-  if (typeof computedValue === "undefined") {
-    computedValue = fn.apply(this, args);
-    cache.set(cacheKey, computedValue);
-  }
-  return computedValue;
-}
-function assemble(fn, context, strategy, cache, serialize) {
-  return strategy.bind(context, fn, cache, serialize);
-}
-function strategyDefault(fn, options) {
-  var strategy = fn.length === 1 ? monadic : variadic;
-  return assemble(fn, this, strategy, options.cache.create(), options.serializer);
-}
-function strategyVariadic(fn, options) {
-  return assemble(fn, this, variadic, options.cache.create(), options.serializer);
-}
-function strategyMonadic(fn, options) {
-  return assemble(fn, this, monadic, options.cache.create(), options.serializer);
-}
-var serializerDefault = function() {
-  return JSON.stringify(arguments);
-};
-function ObjectWithoutPrototypeCache() {
-  this.cache = /* @__PURE__ */ Object.create(null);
-}
-ObjectWithoutPrototypeCache.prototype.get = function(key) {
-  return this.cache[key];
-};
-ObjectWithoutPrototypeCache.prototype.set = function(key, value) {
-  this.cache[key] = value;
-};
-var cacheDefault = {
-  create: function create() {
-    return new ObjectWithoutPrototypeCache();
-  }
-};
-var strategies = {
-  variadic: strategyVariadic,
-  monadic: strategyMonadic
-};
-
 // ../../node_modules/intl-messageformat/lib/src/error.js
 var ErrorCode;
 (function(ErrorCode2) {
@@ -10633,10 +10652,10 @@ var IntlMessageFormat = (
   /** @class */
   function() {
     function IntlMessageFormat2(message, locales, overrideFormats, opts) {
-      var _this = this;
       if (locales === void 0) {
         locales = IntlMessageFormat2.defaultLocale;
       }
+      var _this = this;
       this.formatterCache = {
         number: {},
         dateTime: {},
@@ -10775,8 +10794,15 @@ var IntlMessageFormat = (
   }()
 );
 
-// ../../packages/config/const.ts
-var BASE = "https://api.stringtale.com";
+// ../../packages/utils/safeAwait.ts
+async function safeAwait(promise) {
+  try {
+    const data = await promise;
+    return [null, data];
+  } catch (error) {
+    return [error, null];
+  }
+}
 
 // ../../packages/utils/fetch.ts
 var StringtaleServerError = class extends Error {
@@ -10789,15 +10815,17 @@ var StringtaleServerError = class extends Error {
 };
 async function fetchUtil(token, action, body) {
   const bodyString = JSON.stringify(body);
-  const res = await fetch(`${process.env.STRINGTALE_BASE || BASE}/api/v1/${action}/`, {
+  const [err, res] = await safeAwait(fetch(`${process.env.STRINGTALE_BASE || BASE}/api/v1/${action}`, {
     method: "POST",
     body: bodyString,
     headers: new Headers({
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-      "Content-Length": bodyString.length.toString()
+      "Authorization": `Bearer ${token}`
     })
-  });
+  }));
+  if (err) {
+    throw new StringtaleServerError(err.toString(), 500);
+  }
   if (!res.ok) {
     const body2 = await res.json();
     throw new StringtaleServerError(body2.message, res.status);
@@ -10815,11 +10843,22 @@ function toValueObject({ name, value, format }) {
 }
 
 // src/index.ts
-var push = async (values, apiKey) => {
-  await fetchUtil(apiKey, `push`, { values });
+var push = async (values, apiKey, loginToken) => {
+  await fetchUtil(apiKey, `push`, { values, loginToken });
 };
-var pull = async (apiKey) => {
-  return await fetchUtil(apiKey, `pull`, {});
+var pull = async (apiKey, loginToken) => {
+  return await fetchUtil(apiKey, `pull`, { loginToken });
+};
+var login = async (username, password) => {
+  const res = await fetch(`${process.env.STRINGTALE_BASE || BASE}/api/v1/login`, {
+    method: "POST",
+    body: JSON.stringify({ username, password })
+  });
+  const body = await res.json();
+  if (!res.ok) {
+    throw new StringtaleServerError(body.message, res.status);
+  }
+  return body.token;
 };
 var toValue = ({ name: _name, value, format }) => {
   const val = value || "";
