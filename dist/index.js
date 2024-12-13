@@ -306141,7 +306141,7 @@ async function run({ githubToken, prTitle = "Stringtale Updates", commitMessage 
     let branch = github.context.ref.replace("refs/heads/", "");
     let stringtaleBranch = `stringtale/${branch}`;
     await gitUtils.switchToMaybeExistingBranch(stringtaleBranch);
-    await gitUtils.reset(github.context.sha);
+    await gitUtils.reset(github.context.sha, "soft");
     const res = await (0, pull_1.default)(props);
     if (res.length === 0) {
         core.info("No files to update");
