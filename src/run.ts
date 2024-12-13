@@ -68,7 +68,7 @@ export async function run({
   let stringtaleBranch = `stringtale/${branch}`;
 
   await gitUtils.switchToMaybeExistingBranch(stringtaleBranch);
-  await gitUtils.reset(github.context.sha, "soft");
+  await gitUtils.reset(github.context.sha, "mixed");
 
   const res = await pullAndReplace(props)
   if (res.length === 0) {
