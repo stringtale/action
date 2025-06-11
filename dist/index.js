@@ -7228,6 +7228,9 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 var src_exports = {};
 __export(src_exports, {
   StringtaleServerError: () => StringtaleServerError,
+  comment: () => comment,
+  fetchUtil: () => fetchUtil,
+  history: () => history,
   login: () => login,
   pull: () => pull,
   push: () => push,
@@ -7857,6 +7860,12 @@ var timeData = {
     "H",
     "h"
   ],
+  "419": [
+    "h",
+    "H",
+    "hB",
+    "hb"
+  ],
   "AC": [
     "H",
     "h",
@@ -7905,8 +7914,8 @@ var timeData = {
     "hB"
   ],
   "AR": [
-    "H",
     "h",
+    "H",
     "hB",
     "hb"
   ],
@@ -7996,9 +8005,9 @@ var timeData = {
     "H"
   ],
   "BO": [
+    "h",
     "H",
     "hB",
-    "h",
     "hb"
   ],
   "BQ": [
@@ -8075,8 +8084,8 @@ var timeData = {
     "hB"
   ],
   "CL": [
-    "H",
     "h",
+    "H",
     "hB",
     "hb"
   ],
@@ -8101,14 +8110,14 @@ var timeData = {
     "H"
   ],
   "CR": [
-    "H",
     "h",
+    "H",
     "hB",
     "hb"
   ],
   "CU": [
-    "H",
     "h",
+    "H",
     "hB",
     "hb"
   ],
@@ -8177,9 +8186,9 @@ var timeData = {
     "hb"
   ],
   "EC": [
+    "h",
     "H",
     "hB",
-    "h",
     "hb"
   ],
   "EE": [
@@ -8315,8 +8324,8 @@ var timeData = {
     "hB"
   ],
   "GT": [
-    "H",
     "h",
+    "H",
     "hB",
     "hb"
   ],
@@ -8343,8 +8352,8 @@ var timeData = {
     "H"
   ],
   "HN": [
-    "H",
     "h",
+    "H",
     "hB",
     "hb"
   ],
@@ -8658,8 +8667,8 @@ var timeData = {
     "hB"
   ],
   "MX": [
-    "H",
     "h",
+    "H",
     "hB",
     "hb"
   ],
@@ -8699,8 +8708,8 @@ var timeData = {
     "hB"
   ],
   "NI": [
-    "H",
     "h",
+    "H",
     "hB",
     "hb"
   ],
@@ -8748,9 +8757,9 @@ var timeData = {
     "hb"
   ],
   "PE": [
+    "h",
     "H",
     "hB",
-    "h",
     "hb"
   ],
   "PF": [
@@ -8808,8 +8817,8 @@ var timeData = {
     "H"
   ],
   "PY": [
-    "H",
     "h",
+    "H",
     "hB",
     "hb"
   ],
@@ -8922,8 +8931,8 @@ var timeData = {
     "hB"
   ],
   "SV": [
-    "H",
     "h",
+    "H",
     "hB",
     "hb"
   ],
@@ -9045,8 +9054,8 @@ var timeData = {
     "hB"
   ],
   "UY": [
-    "H",
     "h",
+    "H",
     "hB",
     "hb"
   ],
@@ -9154,19 +9163,25 @@ var timeData = {
     "H",
     "hB"
   ],
-  "es-BO": [
+  "en-HK": [
+    "h",
+    "hb",
+    "H",
+    "hB"
+  ],
+  "en-IL": [
     "H",
     "h",
-    "hB",
-    "hb"
+    "hb",
+    "hB"
+  ],
+  "en-MY": [
+    "h",
+    "hb",
+    "H",
+    "hB"
   ],
   "es-BR": [
-    "H",
-    "h",
-    "hB",
-    "hb"
-  ],
-  "es-EC": [
     "H",
     "h",
     "hB",
@@ -9179,12 +9194,6 @@ var timeData = {
     "hb"
   ],
   "es-GQ": [
-    "H",
-    "h",
-    "hB",
-    "hb"
-  ],
-  "es-PE": [
     "H",
     "h",
     "hB",
@@ -10634,11 +10643,17 @@ function toValueObject({ name, value, format }) {
 }
 
 // src/index.ts
+var history = async (name, apiKey, loginToken) => {
+  return await fetchUtil(apiKey, `history`, { name, loginToken });
+};
 var push = async (values, apiKey, loginToken) => {
   await fetchUtil(apiKey, `push`, { values, loginToken });
 };
 var pull = async (apiKey, loginToken) => {
   return await fetchUtil(apiKey, `pull`, { loginToken });
+};
+var comment = async (comment2, link, apiKey, loginToken) => {
+  return await fetchUtil(apiKey, `comment`, { loginToken, comment: comment2, link });
 };
 var login = async (username, password) => {
   const res = await fetch(`${process.env.STRINGTALE_BASE || BASE}/api/v1/login`, {
@@ -306445,7 +306460,7 @@ const run_1 = __nccwpck_require__(6046);
 
 /***/ }),
 
-/***/ 3137:
+/***/ 2181:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -306482,11 +306497,8 @@ const glob_1 = __nccwpck_require__(5555);
 const fs_1 = __importDefault(__nccwpck_require__(7147));
 const path_1 = __importDefault(__nccwpck_require__(1017));
 const utils_1 = __nccwpck_require__(3148);
-const node_1 = __nccwpck_require__(10);
 const core = __importStar(__nccwpck_require__(965));
-const pullAndReplace = async ({ token, files = ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js"], root, ignore = [] }) => {
-    core.info("Fetch values from StringTale");
-    const data = await (0, node_1.pull)(token);
+const replace = async ({ data, files = ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js"], root, ignore = [] }) => {
     core.info("Get files to update: " + files.toString());
     const filesPaths = await (0, glob_1.glob)(files, {
         ignore,
@@ -306497,7 +306509,7 @@ const pullAndReplace = async ({ token, files = ["**/*.tsx", "**/*.ts", "**/*.jsx
     for (const file of filesPaths) {
         const fullPath = root ? path_1.default.resolve(root, file) : file;
         const input = fs_1.default.readFileSync(fullPath, 'utf-8');
-        const output = (0, utils_1.replaceInFile)(input, data.content, file);
+        const output = (0, utils_1.replaceInFile)(input, data, file);
         //Contents changed and not a dry run? Write to file
         if (output !== input) {
             fs_1.default.writeFileSync(file, output, 'utf8');
@@ -306507,7 +306519,7 @@ const pullAndReplace = async ({ token, files = ["**/*.tsx", "**/*.ts", "**/*.jsx
     }
     return filesChanged;
 };
-exports["default"] = pullAndReplace;
+exports["default"] = replace;
 
 
 /***/ }),
@@ -306550,8 +306562,17 @@ const github = __importStar(__nccwpck_require__(6781));
 const utils_1 = __nccwpck_require__(3295);
 const plugin_throttling_1 = __nccwpck_require__(1977);
 const gitUtils = __importStar(__nccwpck_require__(3445));
-const pull_1 = __importDefault(__nccwpck_require__(3137));
+const replace_1 = __importDefault(__nccwpck_require__(2181));
+const node_1 = __nccwpck_require__(10);
 // import getLocalConfig, { LocalConfig } from "utils/getLocalConfig"
+const searchPullRequest = async ({ repo, stringtaleBranch, branch, octokit, }) => {
+    const searchQuery = `repo:${repo}+state:open+head:${stringtaleBranch}+base:${branch}+is:pull-request`;
+    const searchResult = await octokit.rest.search.issuesAndPullRequests({
+        q: searchQuery,
+    });
+    core.info(JSON.stringify(searchResult.data, null, 2));
+    return searchResult.data.items;
+};
 const setupOctokit = (githubToken) => {
     return new (utils_1.GitHub.plugin(plugin_throttling_1.throttling))((0, utils_1.getOctokitOptions)(githubToken, {
         throttle: {
@@ -306572,34 +306593,83 @@ const setupOctokit = (githubToken) => {
         },
     }));
 };
-async function run({ githubToken, prTitle = "Stringtale Updates", commitMessage = "Stringtale Updates", ...props }) {
+async function run({ githubToken, prTitle = "Stringtale Updates", commitMessage = "Stringtale Updates", token, ...props }) {
     const octokit = setupOctokit(githubToken);
     let repo = `${github.context.repo.owner}/${github.context.repo.repo}`;
     let branch = github.context.ref.replace("refs/heads/", "");
     let stringtaleBranch = `stringtale/${branch}`;
     await gitUtils.switchToMaybeExistingBranch(stringtaleBranch);
     await gitUtils.reset(github.context.sha);
-    const res = await (0, pull_1.default)(props);
+    core.info("Fetch values from StringTale");
+    // const groupCommitsBy = core.getInput("group-commits-by", { required: false }) as "none" | "version";
+    // if (groupCommitsBy === "version") {
+    //   const datas = await fetchUtil(token, "grouped-pull", {})
+    //   let hasChanges = false
+    //   for (const data of datas) {
+    //     const keys = data.history.map((h) => ({
+    //       key: h.key,
+    //       version: data.version,
+    //       values: [{
+    //         value: h.newValue,
+    //         selector: h.selector
+    //       }]
+    //     }))
+    //     const res = await replace({
+    //       data: keys, ...props
+    //     })
+    //     if (res.length === 0) {
+    //       core.info("No files to update")
+    //       continue
+    //     }
+    //     hasChanges = true
+    //     core.info(`Committing version ${data.version}`)
+    //     // project with `commit: true` setting could have already committed files
+    //     if (!(await gitUtils.checkIfClean())) {
+    //       await gitUtils.commitAll(`Stringtale update from ${data.user ? data.user.name : "[Deleted User]"} (version ${data.version})`);
+    //     }
+    //   }
+    //   if (!hasChanges) {
+    //     return null
+    //   }
+    // } else {
+    const data = await (0, node_1.pull)(token);
+    const res = await (0, replace_1.default)({
+        data, ...props
+    });
     if (res.length === 0) {
         core.info("No files to update");
+        const searchResult = await searchPullRequest({
+            repo,
+            stringtaleBranch,
+            branch,
+            octokit,
+        });
+        if (searchResult.length > 0) {
+            const [pullRequest] = searchResult;
+            await octokit.rest.pulls.update({
+                pull_number: pullRequest.number,
+                ...github.context.repo,
+                state: "closed",
+            });
+        }
         return null;
     }
-    let searchQuery = `repo:${repo}+state:open+head:${stringtaleBranch}+base:${branch}+is:pull-request`;
-    let searchResultPromise = octokit.rest.search.issuesAndPullRequests({
-        q: searchQuery,
-    });
-    const finalPrTitle = `${prTitle}`;
-    core.info("Committing");
     // project with `commit: true` setting could have already committed files
     if (!(await gitUtils.checkIfClean())) {
-        await gitUtils.commitAll(commitMessage);
+        await gitUtils.commitAll(`Stringtale update`);
     }
+    // }
     core.info("Pushing");
     await gitUtils.push(stringtaleBranch, { force: true });
-    let searchResult = await searchResultPromise;
-    core.info(JSON.stringify(searchResult.data, null, 2));
+    const searchResult = await searchPullRequest({
+        repo,
+        stringtaleBranch,
+        branch,
+        octokit,
+    });
+    const finalPrTitle = prTitle;
     let prBody = ``;
-    if (searchResult.data.items.length === 0) {
+    if (searchResult.length === 0) {
         core.info("creating pull request");
         const { data: newPullRequest } = await octokit.rest.pulls.create({
             base: branch,
@@ -306613,7 +306683,7 @@ async function run({ githubToken, prTitle = "Stringtale Updates", commitMessage 
         };
     }
     else {
-        const [pullRequest] = searchResult.data.items;
+        const [pullRequest] = searchResult;
         core.info(`updating found pull request #${pullRequest.number}`);
         await octokit.rest.pulls.update({
             pull_number: pullRequest.number,
