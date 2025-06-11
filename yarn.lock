@@ -313,10 +313,10 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
-"@stringtale/node@^0.5.2":
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/@stringtale/node/-/node-0.5.2.tgz#9e02cf90d019250307441dc6d92f6fa472ecc36d"
-  integrity sha512-Ik6aMj5N3HShN5c1zUgMR5xzbWEOnCYL8vbpl2qrPyHQcoQRNLazTKLR0OQCgjKTcxOY6E10gdJutVyk1ptp8g==
+"@stringtale/node@^0.5.3":
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/@stringtale/node/-/node-0.5.3.tgz#e825e353a93f1a6083b4bb46cc333fd07ace34dc"
+  integrity sha512-+ECkEb+WLd/JbDtVjxBNaqYYRkLUF98Zo65z1b6BuQw0ZF6NafqXGIQGLFqJ8RTPVMnhOGWYRLp58i2xMHbl/w==
 
 "@stringtale/utils@^0.5.2":
   version "0.5.2"

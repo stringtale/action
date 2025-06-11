@@ -9,11 +9,7 @@ import { pull } from "@stringtale/node"
 import * as core from "@actions/core"
 
 
-const pullAndReplace = async ({ token, files = ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js"], root, ignore = [] }: any) => {
-
-  core.info("Fetch values from StringTale")
-
-  const data = await pull(token)
+const replace = async ({ data, files = ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js"], root, ignore = [] }: any) => {
 
   core.info("Get files to update: " + files.toString())
 
@@ -30,7 +26,7 @@ const pullAndReplace = async ({ token, files = ["**/*.tsx", "**/*.ts", "**/*.jsx
     const fullPath = root ? path.resolve(root, file) : file
 
     const input = fs.readFileSync(fullPath, 'utf-8')
-    const output = replaceInFile(input, data.content, file)
+    const output = replaceInFile(input, data, file)
     //Contents changed and not a dry run? Write to file
     if (output !== input) {
       fs.writeFileSync(file, output, 'utf8')
@@ -42,4 +38,4 @@ const pullAndReplace = async ({ token, files = ["**/*.tsx", "**/*.ts", "**/*.jsx
 
 }
 
-export default pullAndReplace
+export default replace
