@@ -305879,7 +305879,7 @@ function wrappy (fn, cb) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.checkIfClean = exports.commitAll = exports.reset = exports.switchToMaybeExistingBranch = exports.pushTags = exports.push = exports.pullBranch = exports.setupUser = void 0;
+exports.deleteRemoteBranch = exports.checkIfClean = exports.commitAll = exports.reset = exports.switchToMaybeExistingBranch = exports.pushTags = exports.push = exports.pullBranch = exports.setupUser = void 0;
 const exec_1 = __nccwpck_require__(5236);
 const setupUser = async () => {
     await (0, exec_1.exec)("git", [
@@ -305932,6 +305932,10 @@ const checkIfClean = async () => {
     return !stdout.length;
 };
 exports.checkIfClean = checkIfClean;
+const deleteRemoteBranch = async (branch, force = false) => {
+    await (0, exec_1.exec)("git", ["push", "origin", "--delete", branch, force && "--force"].filter(Boolean));
+};
+exports.deleteRemoteBranch = deleteRemoteBranch;
 
 
 /***/ }),
@@ -306166,6 +306170,7 @@ async function run({ githubToken, prTitle = "Stringtale Updates", commitMessage 
                 ...github.context.repo,
                 state: "closed",
             });
+            await gitUtils.deleteRemoteBranch(stringtaleBranch, true);
         }
         return null;
     }
