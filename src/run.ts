@@ -1,11 +1,10 @@
-import * as core from "@actions/core"
-import * as github from "@actions/github"
-import { GitHub, getOctokitOptions } from "@actions/github/lib/utils"
-import { throttling } from "@octokit/plugin-throttling"
-import * as gitUtils from "./gitUtils"
-import pullAndReplace from "./pull"
+import * as core from "@actions/core";
+import * as github from "@actions/github";
+import { GitHub, getOctokitOptions } from "@actions/github/lib/utils";
+import { throttling } from "@octokit/plugin-throttling";
+import * as gitUtils from "./gitUtils";
+import pullAndReplace from "./pull";
 // import getLocalConfig, { LocalConfig } from "utils/getLocalConfig"
-
 
 const searchPullRequest = async ({
   repo,
@@ -26,7 +25,6 @@ const searchPullRequest = async ({
   core.info(JSON.stringify(searchResult.data, null, 2));
   return searchResult.data.items;
 };
-
 
 const setupOctokit = (githubToken: string) => {
   return new (GitHub.plugin(throttling))(
@@ -66,11 +64,11 @@ type RunProps = {
   githubToken: string;
   prTitle?: string;
   commitMessage?: string;
-  root?: string,
-  token: string,
-  files?: string[] | string
-  ignore?: string[] | string
-}
+  root?: string;
+  token: string;
+  files?: string[] | string;
+  ignore?: string[] | string;
+};
 
 type RunVersionResult = {
   pullRequestNumber: number;
@@ -82,7 +80,6 @@ export async function run({
   commitMessage = "Stringtale Updates",
   ...props
 }: RunProps): Promise<RunVersionResult> {
-
   const octokit = setupOctokit(githubToken);
 
   let repo = `${github.context.repo.owner}/${github.context.repo.repo}`;
@@ -90,11 +87,11 @@ export async function run({
   let stringtaleBranch = `stringtale/${branch}`;
 
   await gitUtils.switchToMaybeExistingBranch(stringtaleBranch);
-  await gitUtils.reset(github.context.sha, "mixed");
+  await gitUtils.reset(github.context.sha);
 
-  const res = await pullAndReplace(props)
+  const res = await pullAndReplace(props);
   if (res.length === 0) {
-    core.info("No files to update")
+    core.info("No files to update");
 
     const searchResult = await searchPullRequest({
       repo,
@@ -108,21 +105,21 @@ export async function run({
         pull_number: pullRequest.number,
         ...github.context.repo,
         state: "closed",
-      })
+      });
     }
-    return null
+    return null;
   }
 
   const finalPrTitle = `${prTitle}`;
 
-  core.info("Committing")
+  core.info("Committing");
 
   // project with `commit: true` setting could have already committed files
   if (!(await gitUtils.checkIfClean())) {
     await gitUtils.commitAll(commitMessage);
   }
 
-  core.info("Pushing")
+  core.info("Pushing");
 
   await gitUtils.push(stringtaleBranch, { force: true });
 
@@ -133,7 +130,7 @@ export async function run({
     octokit,
   });
 
-  let prBody = ``
+  let prBody = ``;
 
   if (searchResult.length === 0) {
     core.info("creating pull request");
