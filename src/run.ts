@@ -106,6 +106,7 @@ export async function run({
         ...github.context.repo,
         state: "closed",
       });
+      await gitUtils.deleteRemoteBranch(stringtaleBranch, true);
     }
     return null;
   }

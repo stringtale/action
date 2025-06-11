@@ -61,3 +61,11 @@ export const checkIfClean = async (): Promise<boolean> => {
   const { stdout } = await getExecOutput("git", ["status", "--porcelain"]);
   return !stdout.length;
 };
+
+export const deleteRemoteBranch = async (branch: string, force = false) => {
+  await exec("git", ["push", "origin", "--delete", branch, force && "--force"].filter<string>(Boolean as any));
+};
+
+
+
+
