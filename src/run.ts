@@ -6,6 +6,28 @@ import * as gitUtils from "./gitUtils"
 import pullAndReplace from "./pull"
 // import getLocalConfig, { LocalConfig } from "utils/getLocalConfig"
 
+
+const searchPullRequest = async ({
+  repo,
+  stringtaleBranch,
+  branch,
+  octokit,
+}: {
+  repo: string;
+  stringtaleBranch: string;
+  branch: string;
+  octokit: ReturnType<typeof setupOctokit>;
+}) => {
+  const searchQuery = `repo:${repo}+state:open+head:${stringtaleBranch}+base:${branch}+is:pull-request`;
+  const searchResult = await octokit.rest.search.issuesAndPullRequests({
+    q: searchQuery,
+  });
+
+  core.info(JSON.stringify(searchResult.data, null, 2));
+  return searchResult.data.items;
+};
+
+
 const setupOctokit = (githubToken: string) => {
   return new (GitHub.plugin(throttling))(
     getOctokitOptions(githubToken, {
@@ -73,13 +95,24 @@ export async function run({
   const res = await pullAndReplace(props)
   if (res.length === 0) {
     core.info("No files to update")
+
+    const searchResult = await searchPullRequest({
+      repo,
+      stringtaleBranch,
+      branch,
+      octokit,
+    });
+    if (searchResult.length > 0) {
+      const [pullRequest] = searchResult;
+      await octokit.rest.pulls.update({
+        pull_number: pullRequest.number,
+        ...github.context.repo,
+        state: "closed",
+      })
+    }
     return null
   }
 
-  let searchQuery = `repo:${repo}+state:open+head:${stringtaleBranch}+base:${branch}+is:pull-request`;
-  let searchResultPromise = octokit.rest.search.issuesAndPullRequests({
-    q: searchQuery,
-  });
   const finalPrTitle = `${prTitle}`;
 
   core.info("Committing")
@@ -88,17 +121,21 @@ export async function run({
   if (!(await gitUtils.checkIfClean())) {
     await gitUtils.commitAll(commitMessage);
   }
-  
+
   core.info("Pushing")
 
   await gitUtils.push(stringtaleBranch, { force: true });
 
-  let searchResult = await searchResultPromise;
-  core.info(JSON.stringify(searchResult.data, null, 2));
+  const searchResult = await searchPullRequest({
+    repo,
+    stringtaleBranch,
+    branch,
+    octokit,
+  });
 
   let prBody = ``
 
-  if (searchResult.data.items.length === 0) {
+  if (searchResult.length === 0) {
     core.info("creating pull request");
     const { data: newPullRequest } = await octokit.rest.pulls.create({
       base: branch,
@@ -112,7 +149,7 @@ export async function run({
       pullRequestNumber: newPullRequest.number,
     };
   } else {
-    const [pullRequest] = searchResult.data.items;
+    const [pullRequest] = searchResult;
 
     core.info(`updating found pull request #${pullRequest.number}`);
     await octokit.rest.pulls.update({
