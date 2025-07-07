@@ -278272,9 +278272,13 @@ var import_path = __toESM(__nccwpck_require__(6928));
 
 // ../../packages/utils/replaceInFile.ts
 var import_ts_morph = __toESM(require_ts_morph());
+
+// ../../packages/utils/shouldBeTemplate.ts
 function shouldBeTemplate(val) {
-  return /[`{}'"<>]/.test(val);
+  return /[`{}'’"<>]/.test(val);
 }
+
+// ../../packages/utils/replaceInFile.ts
 function getValue(val) {
   if (shouldBeTemplate(val)) {
     return `{/* HTML */ \`${val}\`}`;
