@@ -330,10 +330,10 @@
   resolved "https://registry.yarnpkg.com/@stringtale/node/-/node-0.5.2.tgz#9e02cf90d019250307441dc6d92f6fa472ecc36d"
   integrity sha512-Ik6aMj5N3HShN5c1zUgMR5xzbWEOnCYL8vbpl2qrPyHQcoQRNLazTKLR0OQCgjKTcxOY6E10gdJutVyk1ptp8g==
 
-"@stringtale/utils@^0.5.2":
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/@stringtale/utils/-/utils-0.5.2.tgz#d6bf3678ae4bf0ae7a5e5a87230c91bba308f58c"
-  integrity sha512-63nePBnAqYTpQCsfkPzqe8wZRrad4mf7BsjioZ+PghLWNGxmqKo1RdAp/vf1UfnlBQCTaRqoN5D4n2ILwJF2IA==
+"@stringtale/utils@^0.5.4":
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/@stringtale/utils/-/utils-0.5.4.tgz#cb35bc064edd87d07898edd2c79f2fbe12674d3e"
+  integrity sha512-ld9rjp7daYa+NYOwQ34Q2yJHYW5lK+/0mLDLAGT12F2N+T7PZB/d4IUkieGqC/iA3XoELuZUQsgRGWIVNnWNOg==
 
 "@types/fs-extra@^11.0.4":
   version "11.0.4"
